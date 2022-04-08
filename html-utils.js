@@ -15,11 +15,17 @@ function createListElement(e, onClickRemoveFunction) {
   elmDiv.appendChild(lbl);
 
   // And a button to allow removing
+  const btnAdd = createRemoveBtn(onClickRemoveFunction);
+  elmDiv.appendChild(btnAdd);
+
+  return elmDiv;
+}
+
+function createRemoveBtn(onClickRemoveFunction) {
   const btnAdd = document.createElement("button");
   btnAdd.setAttribute("type", "button");
   btnAdd.innerText = "Remove";
   btnAdd.addEventListener("click", onClickRemoveFunction);
-
-  elmDiv.appendChild(btnAdd);
-  return elmDiv;
+  return btnAdd;
 }
+

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
+<head>
   <meta charset="utf-8" />
-  <title>Habit tracker administration 🔑</title>
+  <title>Habit tracker - Administration 🔑</title>
   <script type="text/javascript" src="users.js"></script>
   <script type="text/javascript" src="habits.js"></script>
   <script type="text/javascript" src="schedules.js"></script>
@@ -129,8 +129,8 @@
 
     function populateSchedules() {
       const listDiv = document.getElementById("list-schedule")
-      const list = getExistingSchedules()
-      if (list.length == 0) {
+      const schedules = getExistingSchedules()
+      if (schedules.length == 0) {
         listDiv.innerText = "None."
         return
       }
@@ -138,14 +138,42 @@
       while (listDiv.firstChild) {
         listDiv.firstChild.remove()
       }
-      // 2. Populate current list on div
-      list.forEach(e => {
+      
+      // 2. Populate current table on div
+      const schedulesTable = document.createElement("table")
+      // header
+      const headerRow = document.createElement("tr")
+      schedulesTable.appendChild(headerRow)
+      Array.from(["Who", "What", "When", "Action"])
+        .forEach(e => {
+          const thElm = document.createElement("th")
+          thElm.innerText = e
+          headerRow.appendChild(thElm)
+        })
+      listDiv.appendChild(schedulesTable)
+
+      // rows
+      schedules.forEach(s => {
         const onClickRemoveFunction = () => {
-          removeSchedule(e);
+          removeSchedule(s);
           displayOutcome("outcomeAction-schedule", "Sucessfully removed! 🎉");
-          populateSchedules(); // Refresh list again
+          populateSchedules(); // Refresh table again
         }
-        listDiv.appendChild(createListElement(e, onClickRemoveFunction))
+        const sched = Schedule.from(s)
+        const trUsr = document.createElement("td")
+        trUsr.innerText = sched.user
+        const trHbt = document.createElement("td")
+        trHbt.innerText = sched.habit
+        const trDays = document.createElement("td")
+        trDays.innerText = sched.days
+        const trRemove = document.createElement("td")
+        trRemove.appendChild(createRemoveBtn(onClickRemoveFunction))
+        const row = document.createElement("tr")
+        row.appendChild(trUsr)
+        row.appendChild(trHbt)
+        row.appendChild(trDays)
+        row.appendChild(trRemove)
+        schedulesTable.appendChild(row)
       })
     }
 
@@ -175,7 +203,7 @@
 
     function tryAddSchedule() {
       const checkboxes = Array.from(document.querySelectorAll('input[name="cbshedule"]:checked'));
-      const selectedDays = checkboxes.filter(cb => cb.checked).map(cb => cb.value).reduce((prev, curr) => prev + curr)
+      const selectedDays = checkboxes.filter(cb => cb.checked).map(cb => cb.value).join("-")
 
       const usrDl = document.getElementById("uschedule")
       const selectedUsr = usrDl.options[usrDl.selectedIndex].value
@@ -183,7 +211,8 @@
       const hbtDl = document.getElementById("hschedule")
       const selectedHbt = hbtDl.options[hbtDl.selectedIndex].value
 
-      const newSchedule = `${selectedUsr}-${selectedHbt}-${selectedDays}`
+      //TODO: this splitting shouldn't be done here, it's a storage concern. Abstract away.
+      const newSchedule = `${selectedUsr}|${selectedHbt}|${selectedDays}`
       if (getExistingSchedules().includes(newSchedule)) {
         alert(`${newSchedule} already exists`)
         return

@@ -6,7 +6,7 @@ class Schedule {
     }
 
     static from(str) {
-        const schedule = str.split("-")
+        const schedule = str.split("|")
         return new Schedule(schedule[0],  schedule[1], schedule[2])
     }
 }
