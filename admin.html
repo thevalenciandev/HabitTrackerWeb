@@ -5,6 +5,7 @@
     <title>Habit tracker administration</title>
     <script type="text/javascript" src="users.js"></script>
     <script type="text/javascript" src="habits.js"></script>
+    <script type="text/javascript" src="schedules.js"></script>
     <script type="text/javascript" src="html-utils.js"></script>
   </head>
       <h1>Habit tracker (administration)</h1>
@@ -16,6 +17,10 @@
       <h2>Habits</h2>
       <div id="list-habit"></div>
       <div id="outcomeAction-habit"></div>
+
+      <h2>Schedules</h2>
+      <div id="list-schedule"></div>
+      <div id="outcomeAction-schedule"></div>
       
       <h2>Add new users</h2>
       <form action="javascript:tryAddUser()">
@@ -32,6 +37,28 @@
         <input type="submit" value="Add">
       </form>
       <div id="outcomeAdd-habit"></div>
+
+      <h2>Add schedules</h2>
+      <form action="javascript:tryAddSchedule()">
+        <select name=uschedule” id="uschedule"></select>
+        <select name=hschedule” id="hschedule"></select>
+        <input type="checkbox" id="mon" name="mon" value="Mon">
+        <label for="mon">Mon</label>
+        <input type="checkbox" id="tue" name="tue" value="Tue">
+        <label for="tue">Tue</label>
+        <input type="checkbox" id="wed" name="wed" value="Wed">
+        <label for="weds">Wed</label>
+        <input type="checkbox" id="thu" name="thu" value="Thu">
+        <label for="tues">Thu</label>
+        <input type="checkbox" id="fri" name="fri" value="fri">
+        <label for="tues">Fri</label>
+        <input type="checkbox" id="sat" name="sat" value="Sat">
+        <label for="tues">Sat</label>
+        <input type="checkbox" id="sun" name="sun" value="Sun">
+        <label for="tues">Sun</label>
+        <input type="submit" value="Add">
+      </form>
+      <div id="outcomeAdd-schedule"></div>
       
       <a href="index.html">Go back</a>
 
@@ -52,7 +79,7 @@
           }
           // 2. Populate current list on div
           list.forEach(e => {
-            const onRemoveElementFunction = () => 
+            const onClickRemoveFunction = () => 
             {
               removeElmFunction(e);
               displayOutcome("outcomeAction-" + elmType, "Sucessfully removed! 🎉");
@@ -62,8 +89,63 @@
                 addElmFunction,
                 removeElmFunction
               ); // Refresh list again
+              populateScheduleDropDownLists() // TODO: pass this as a clearFunction?
             }
-            listDiv.appendChild(createListElement(e, onRemoveElementFunction))
+            listDiv.appendChild(createListElement(e, onClickRemoveFunction))
+          })
+        }
+
+        function populateScheduleDropDownLists() {
+          const users = getExistingUsers()
+          const usersDropList = document.getElementById("uschedule")
+          // 1. First clear the list 
+          while (usersDropList.firstChild) {
+            usersDropList.firstChild.remove()
+          }
+          if (users.length > 0) {
+            users.forEach(u => {
+              const op = document.createElement("option")
+              op.setAttribute("value", u)
+              op.innerText = u
+              usersDropList.appendChild(op)
+            })
+          }
+          const habitsDropList = document.getElementById("hschedule")
+          // 1. First clear the list 
+          while (habitsDropList.firstChild) {
+            habitsDropList.firstChild.remove()
+          }
+          const habits = getExistingHabits()
+          if (habits.length > 0) {
+            habits.forEach(h => {
+              const op = document.createElement("option")
+              op.setAttribute("value", h)
+              op.innerText = h
+              habitsDropList.appendChild(op)
+            })
+          }
+        }
+        
+        function populateSchedules() {
+          const listDiv = document.getElementById("list-schedule")
+          const list = getExistingSchedules()
+          if (list.length == 0) {
+            listDiv.innerText = "None."
+            return
+          }
+          // 1. First clear the div 
+          while (listDiv.firstChild) {
+            listDiv.firstChild.remove()
+          }
+          // 2. Populate current list on div
+          list.forEach(e => {
+            const onClickRemoveFunction = () => 
+            {
+              removeSchedule(e);
+              displayOutcome("outcomeAction-schedule", "Sucessfully removed! 🎉");
+              populateSchedules(); // Refresh list again
+            }
+            listDiv.appendChild(createListElement(e, onClickRemoveFunction))
           })
         }
 
@@ -76,6 +158,7 @@
           addUser(newUser)
           displayOutcome("outcomeAdd-user", "Sucessfully added! 🎉")
           populateList("user", () => getExistingUsers(), u => addUser(u), u => removeUser(u))
+          populateScheduleDropDownLists()
         }
 
         function tryAddHabit() {
@@ -87,11 +170,25 @@
           addHabit(newHabit)
           displayOutcome("outcomeAdd-habit", "Sucessfully added! 🎉")
           populateList("habit", () => getExistingHabits(), h => addHabit(h), h => removeHabit(h))
+          populateScheduleDropDownLists()
+        }
+
+        function tryAddSchedule() {
+          const newSchedule = document.getElementById("luser").value
+          if (getExistingSchedules().includes(newSchedule)) {
+            alert(`${newSchedule} already exists`)
+            return
+          }
+          addSchedule(newSchedule)
+          displayOutcome("outcomeAdd-schedule", "Sucessfully added! 🎉")
+          populateSchedules()
         }
 
         // Upon loading page, do the following:
         populateList("user", () => getExistingUsers(), u => addUser(u), u => removeUser(u))
         populateList("habit", () => getExistingHabits(), h => addHabit(h), h => removeHabit(h))
+        populateScheduleDropDownLists()
+        populateSchedules()
       </script>
   </body>
 </html>
