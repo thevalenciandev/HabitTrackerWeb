@@ -4,11 +4,54 @@
 <head>
   <meta charset="utf-8" />
   <title>Habit tracker home</title>
+  <script type="text/javascript" src="schedules.js"></script>
 </head>
 
 <body>
-  <h1>Habit tracker!</h1>
-  <a href="admin.html">Administration</a>
+  <h1>Habit tracker ✅</h1>
+
+  <a href="admin.html">Go to administration</a>
+  <h2>What's on today?</h2>
+  <div id="list-habit"></div>
+
+
+  <script type="text/javascript">
+    function toDayOfWeek(day) {
+      switch (day) {
+        case 0: return "Sun"
+        case 1: return "Mon"
+        case 2: return "Tue"
+        case 3: return "Wed"
+        case 4: return "Thu"
+        case 5: return "Fri"
+        case 6: return "Sat"
+      }
+    }
+
+    function showTodaysHabits() {
+      const schedules = getExistingSchedules()
+      console.log(schedules)
+
+      const listDiv = document.getElementById("list-habit")
+      if (schedules.length == 0) {
+        listDiv.innerText = "Nothing."
+        return
+      }
+
+      const today = toDayOfWeek(new Date().getDay())
+      schedules.forEach(e => {
+        if (e.includes(today)) {
+          const elm = document.createElement("div")
+          const schedule = e.split("-")
+          // TODO: encapsulate in object
+          elm.innerText = `${schedule[0]}: ${schedule[1]}`
+          listDiv.appendChild(elm)
+        }
+      });
+    }
+
+    showTodaysHabits()
+  </script>
 </body>
 
 </html>
