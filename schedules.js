@@ -1,3 +1,16 @@
+class Schedule {
+    constructor(user, habit, days) {
+        this.user = user
+        this.habit = habit
+        this.days = days
+    }
+
+    static from(str) {
+        const schedule = str.split("-")
+        return new Schedule(schedule[0],  schedule[1], schedule[2])
+    }
+}
+
 function getExistingSchedules() {
     console.log(sessionStorage.schedules)
     return sessionStorage.schedules == null ? [] : JSON.parse(sessionStorage.schedules)

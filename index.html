@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Habit tracker home</title>
+  <title>Habit tracker - Home</title>
   <script type="text/javascript" src="schedules.js"></script>
 </head>
 
@@ -39,15 +39,14 @@
       }
 
       const today = toDayOfWeek(new Date().getDay())
-      schedules.forEach(e => {
-        if (e.includes(today)) {
-          const elm = document.createElement("div")
-          const schedule = e.split("-")
-          // TODO: encapsulate in object
-          elm.innerText = `${schedule[0]}: ${schedule[1]}`
-          listDiv.appendChild(elm)
-        }
-      });
+      schedules.map(s => Schedule.from(s))
+        .forEach(s => {
+          if (s.days.includes(today)) {
+            const elm = document.createElement("div")
+            elm.innerText = `${s.user}: ${s.habit}`
+            listDiv.appendChild(elm)
+          }
+        });
     }
 
     showTodaysHabits()
