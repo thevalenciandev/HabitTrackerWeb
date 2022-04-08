@@ -42,19 +42,19 @@
       <form action="javascript:tryAddSchedule()">
         <select name=uschedule” id="uschedule"></select>
         <select name=hschedule” id="hschedule"></select>
-        <input type="checkbox" id="mon" name="mon" value="Mon">
+        <input type="checkbox" id="mon" name="cbshedule" value="Mon">
         <label for="mon">Mon</label>
-        <input type="checkbox" id="tue" name="tue" value="Tue">
+        <input type="checkbox" id="tue" name="cbshedule" value="Tue">
         <label for="tue">Tue</label>
-        <input type="checkbox" id="wed" name="wed" value="Wed">
+        <input type="checkbox" id="wed" name="cbshedule" value="Wed">
         <label for="weds">Wed</label>
-        <input type="checkbox" id="thu" name="thu" value="Thu">
+        <input type="checkbox" id="thu" name="cbshedule" value="Thu">
         <label for="tues">Thu</label>
-        <input type="checkbox" id="fri" name="fri" value="fri">
+        <input type="checkbox" id="fri" name="cbshedule" value="Fri">
         <label for="tues">Fri</label>
-        <input type="checkbox" id="sat" name="sat" value="Sat">
+        <input type="checkbox" id="sat" name="cbshedule" value="Sat">
         <label for="tues">Sat</label>
-        <input type="checkbox" id="sun" name="sun" value="Sun">
+        <input type="checkbox" id="sun" name="cbshedule" value="Sun">
         <label for="tues">Sun</label>
         <input type="submit" value="Add">
       </form>
@@ -174,7 +174,16 @@
         }
 
         function tryAddSchedule() {
-          const newSchedule = document.getElementById("luser").value
+          const checkboxes = Array.from(document.querySelectorAll('input[name="cbshedule"]:checked'));
+          const selectedDays = checkboxes.filter(cb => cb.checked).map(cb => cb.value).reduce((prev, curr) => prev + curr)
+          
+          const usrDl = document.getElementById("uschedule")
+          const selectedUsr = usrDl.options[usrDl.selectedIndex].value
+
+          const hbtDl = document.getElementById("hschedule")
+          const selectedHbt = hbtDl.options[hbtDl.selectedIndex].value
+
+          const newSchedule = `${selectedUsr}-${selectedHbt}-${selectedDays}`
           if (getExistingSchedules().includes(newSchedule)) {
             alert(`${newSchedule} already exists`)
             return

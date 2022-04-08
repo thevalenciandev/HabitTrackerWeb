@@ -3,13 +3,12 @@ function getExistingSchedules() {
     return sessionStorage.schedules == null ? [] : JSON.parse(sessionStorage.schedules)
 }
 
-function addSchedule(user, habit, schedule) {
+function addSchedule(schedule) {
     const schedules = getExistingSchedules()
-    const actualSchedule = `${user}-${habit}-${schedule}`
-    console.log(`Adding ${actualSchedule}... into ${schedules}}`)
-    schedules.push(actualSchedule)
+    console.log(`Adding ${schedule}... into ${schedules}}`)
+    schedules.push(schedule)
     sessionStorage.schedules = JSON.stringify(schedules)
-    console.log(`${actualSchedule} added into ${sessionStorage.schedules}`)
+    console.log(`${schedule} added into ${sessionStorage.schedules}`)
 }
 
 function removeSchedule(schedule) {
