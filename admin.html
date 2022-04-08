@@ -51,9 +51,20 @@
             listDiv.firstChild.remove()
           }
           // 2. Populate current list on div
-          list.forEach(e => 
-            listDiv.appendChild(createListElement(e, elmType, getListElmFunction, addElmFunction, removeElmFunction))
-          )
+          list.forEach(e => {
+            const onRemoveElementFunction = () => 
+            {
+              removeElmFunction(e);
+              displayOutcome("outcomeAction-" + elmType, "Sucessfully removed! 🎉");
+              populateList(
+                elmType,
+                getListElmFunction,
+                addElmFunction,
+                removeElmFunction
+              ); // Refresh list again
+            }
+            listDiv.appendChild(createListElement(e, onRemoveElementFunction))
+          })
         }
 
         function tryAddUser() {
