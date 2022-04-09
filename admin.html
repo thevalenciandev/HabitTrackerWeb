@@ -203,7 +203,7 @@
 
     function tryAddSchedule() {
       const checkboxes = Array.from(document.querySelectorAll('input[name="cbshedule"]:checked'));
-      const selectedDays = checkboxes.filter(cb => cb.checked).map(cb => cb.value).join("-")
+      const selectedDays = checkboxes.filter(cb => cb.checked).map(cb => cb.value).join(",")
 
       const usrDl = document.getElementById("uschedule")
       const selectedUsr = usrDl.options[usrDl.selectedIndex].value
