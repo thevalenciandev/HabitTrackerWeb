@@ -1,7 +1,7 @@
 function displayOutcome(divId, outcome) {
   const elm = document.getElementById(divId);
   elm.innerText = outcome;
-  setTimeout(() => (elm.innerHTML = ""), 3000); //Remove after 3 seconds
+  setTimeout(() => (elm.innerHTML = ""), 3000); // Clear message after 3 seconds
 }
 
 function createListElement(e, onClickRemoveFunction) {
@@ -15,17 +15,17 @@ function createListElement(e, onClickRemoveFunction) {
   elmDiv.appendChild(lbl);
 
   // And a button to allow removing
-  const btnAdd = createRemoveBtn(onClickRemoveFunction);
-  elmDiv.appendChild(btnAdd);
+  const btnRemove = createBtn("Remove", onClickRemoveFunction);
+  elmDiv.appendChild(btnRemove);
 
   return elmDiv;
 }
 
-function createRemoveBtn(onClickRemoveFunction) {
-  const btnAdd = document.createElement("button");
-  btnAdd.setAttribute("type", "button");
-  btnAdd.innerText = "Remove";
-  btnAdd.addEventListener("click", onClickRemoveFunction);
-  return btnAdd;
+function createBtn(text, onClickFunction) {
+  const btn = document.createElement("button");
+  btn.setAttribute("type", "button");
+  btn.innerText = text;
+  btn.addEventListener("click", onClickFunction);
+  return btn;
 }
 

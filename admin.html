@@ -11,8 +11,10 @@
 </head>
 
 <body>
+  <a href="index.html">Home</a>
+  <a href="ranking.html">Ranking</a>
+
   <h1>Habit tracker administration 🔑</h1>
-  <a href="index.html">Go home</a>
 
   <h2>Users</h2>
   <div id="list-user"></div>
@@ -23,7 +25,7 @@
   <div id="outcomeAction-habit"></div>
 
   <h2>Schedules</h2>
-  <div id="list-schedule"></div>
+  <div id="table-schedule"></div>
   <div id="outcomeAction-schedule"></div>
 
   <h2>Add new users</h2>
@@ -128,7 +130,7 @@
     }
 
     function populateSchedules() {
-      const listDiv = document.getElementById("list-schedule")
+      const listDiv = document.getElementById("table-schedule")
       const schedules = getExistingSchedules()
       if (schedules.length == 0) {
         listDiv.innerText = "None."
@@ -167,7 +169,7 @@
         const trDays = document.createElement("td")
         trDays.innerText = sched.days
         const trRemove = document.createElement("td")
-        trRemove.appendChild(createRemoveBtn(onClickRemoveFunction))
+        trRemove.appendChild(createBtn("Remove", onClickRemoveFunction))
         const row = document.createElement("tr")
         row.appendChild(trUsr)
         row.appendChild(trHbt)
