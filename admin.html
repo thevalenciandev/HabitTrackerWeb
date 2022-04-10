@@ -140,43 +140,37 @@
       while (listDiv.firstChild) {
         listDiv.firstChild.remove()
       }
-      
-      // 2. Populate current table on div
-      const schedulesTable = document.createElement("table")
-      // header
-      const headerRow = document.createElement("tr")
-      schedulesTable.appendChild(headerRow)
-      Array.from(["Who", "What", "When", "Action"])
-        .forEach(e => {
-          const thElm = document.createElement("th")
-          thElm.innerText = e
-          headerRow.appendChild(thElm)
-        })
-      listDiv.appendChild(schedulesTable)
 
-      // rows
-      schedules.forEach(s => {
+      // 2. Populate current table on div
+      const fillTableTdFunction = (row, col, td) => {
+        const s = schedules[row]
+
         const onClickRemoveFunction = () => {
           removeSchedule(s);
           displayOutcome("outcomeAction-schedule", "Sucessfully removed! 🎉");
           populateSchedules(); // Refresh table again
         }
+
         const sched = Schedule.from(s)
-        const trUsr = document.createElement("td")
-        trUsr.innerText = sched.user
-        const trHbt = document.createElement("td")
-        trHbt.innerText = sched.habit
-        const trDays = document.createElement("td")
-        trDays.innerText = sched.days
-        const trRemove = document.createElement("td")
-        trRemove.appendChild(createBtn("Remove", onClickRemoveFunction))
-        const row = document.createElement("tr")
-        row.appendChild(trUsr)
-        row.appendChild(trHbt)
-        row.appendChild(trDays)
-        row.appendChild(trRemove)
-        schedulesTable.appendChild(row)
-      })
+        if (col == 0) {
+          td.innerText = sched.user
+        } else if (col == 1) {
+          td.innerText = sched.habit
+        } else if (col == 2) {
+          td.innerText = sched.days
+        } else if (col == 3) {
+          const onClickRemoveFunction = () => {
+            removeSchedule(s);
+            displayOutcome("outcomeAction-schedule", "Sucessfully removed! 🎉");
+            populateSchedules(); // Refresh table again
+          }
+          td.appendChild(createBtn("Remove", onClickRemoveFunction))
+        }
+      }
+
+      const schedulesTable = createTable(schedules.length, 4,
+        fillTableTdFunction, Array.from(["Who", "What", "When", "Action"]))
+      listDiv.appendChild(schedulesTable)
     }
 
     function tryAddUser() {

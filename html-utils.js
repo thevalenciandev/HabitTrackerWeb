@@ -29,3 +29,29 @@ function createBtn(text, onClickFunction) {
   return btn;
 }
 
+function createTable(numberOfRows, numberOfCols, fillColumnFunction, headers) {
+  const table = document.createElement("table")
+  
+  if (headers) {
+    const headerRow = document.createElement("tr")
+    table.appendChild(headerRow)
+    headers.forEach(h => {
+      const thElm = document.createElement("th")
+      thElm.innerText = h
+      headerRow.appendChild(thElm)
+    })
+  }
+
+  // body
+  for (let i=0; i<numberOfRows; i++) {
+    const row = document.createElement("tr")
+    for (let j=0; j<numberOfCols; j++) {
+      const col = document.createElement("td")
+      fillColumnFunction(i, j, col)
+      row.appendChild(col)
+    }
+    table.appendChild(row)
+  }
+
+  return table
+}

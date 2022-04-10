@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Habit tracker - Home</title>
+    <script type="text/javascript" src="ranking.js"></script>
     <script type="text/javascript" src="schedules.js"></script>
     <script type="text/javascript" src="html-utils.js"></script>
 </head>
@@ -18,7 +19,22 @@
     <div id="table-ranking"></div>
 
     <script type="text/javascript">
-        // User Points Last_10
+        const ranking = Array.from(getExistingRanking().values())
+        // TODO: sort this ranking
+
+        const fillColFn = (row, col, td) => {
+            const usrRanking = ranking[row]
+            
+            if (col == 0) {
+                td.innerText = usrRanking.user
+            } else if (col == 1) {
+                td.innerText = usrRanking.points
+            }
+        }
+        const rankingTable = createTable(ranking.length, 2, fillColFn, ["Who", "Points"])
+
+        const tableDiv = document.getElementById("table-ranking")
+        tableDiv.appendChild(rankingTable)
     </script>
 
 </body>
