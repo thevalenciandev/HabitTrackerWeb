@@ -168,8 +168,9 @@
         }
       }
 
-      const schedulesTable = createTable(schedules.length, 4,
-        fillTableTdFunction, Array.from(["Who", "What", "When", "Action"]))
+      const headers = Array.from(["Who", "What", "When", "Action"])
+      const schedulesTable = createTable(schedules.length, headers.length,
+        fillTableTdFunction, headers)
       listDiv.appendChild(schedulesTable)
     }
 

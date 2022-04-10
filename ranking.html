@@ -19,22 +19,23 @@
     <div id="table-ranking"></div>
 
     <script type="text/javascript">
-        const ranking = Array.from(getExistingRanking().values())
-        // TODO: sort this ranking
+        const ranking = Array.from(getExistingRanking().values()).sort((x, y) => y.points - x.points)
 
         const fillColFn = (row, col, td) => {
             const usrRanking = ranking[row]
             
             if (col == 0) {
-                td.innerText = usrRanking.user
+                td.innerText = row + 1
             } else if (col == 1) {
+                td.innerText = usrRanking.user
+            } else if (col == 2) {
                 td.innerText = usrRanking.points
             }
         }
-        const rankingTable = createTable(ranking.length, 2, fillColFn, ["Who", "Points"])
+        const headers = ["Rank", "Who", "Points"]
+        const rankingTable = createTable(ranking.length, headers.length, fillColFn, headers)
 
-        const tableDiv = document.getElementById("table-ranking")
-        tableDiv.appendChild(rankingTable)
+        document.getElementById("table-ranking").appendChild(rankingTable)
     </script>
 
 </body>
