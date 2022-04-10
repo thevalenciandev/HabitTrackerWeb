@@ -9,7 +9,7 @@ class RankingPoints {
     }
 
     static from(json) {
-        return new RankingPoints(json.user, json.points)
+        return new RankingPoints(json.user, parseInt(json.points))
     }
 
     plus(points) {

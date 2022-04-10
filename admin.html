@@ -40,6 +40,8 @@
   <form action="javascript:tryAddHabit()">
     <label for="lhabit">Habit:</label>
     <input type="text" id="lhabit">
+    <label for="hpoints">Points:</label>
+    <input type="number" id="hpoints" min="1" max="5">
     <input type="submit" value="Add">
   </form>
   <div id="outcomeAdd-habit"></div>
@@ -113,17 +115,20 @@
           usersDropList.appendChild(op)
         })
       }
+
       const habitsDropList = document.getElementById("hschedule")
-      // 1. First clear the list 
+      // 1. First clear the drop list 
       while (habitsDropList.firstChild) {
         habitsDropList.firstChild.remove()
       }
+
+      // 2. Populate the drop list
       const habits = getExistingHabits()
-      if (habits.length > 0) {
+      if (habits.size > 0) {
         habits.forEach(h => {
           const op = document.createElement("option")
-          op.setAttribute("value", h)
-          op.innerText = h
+          op.setAttribute("value", h.name)
+          op.innerText = h.name
           habitsDropList.appendChild(op)
         })
       }
@@ -142,7 +147,7 @@
       }
 
       // 2. Populate current table on div
-      const fillTableTdFunction = (row, col, td) => {
+      const fillColFn = (row, col, td) => {
         const s = schedules[row]
 
         const onClickRemoveFunction = () => {
@@ -168,9 +173,9 @@
         }
       }
 
-      const headers = Array.from(["Who", "What", "When", "Action"])
+      const headers = Array.from(["User", "Habit", "When", "Action"])
       const schedulesTable = createTable(schedules.length, headers.length,
-        fillTableTdFunction, headers)
+        fillColFn, headers)
       listDiv.appendChild(schedulesTable)
     }
 
@@ -188,14 +193,47 @@
 
     function tryAddHabit() {
       const newHabit = document.getElementById("lhabit").value
-      if (getExistingHabits().includes(newHabit)) {
+      const points = document.getElementById("hpoints").value
+      if (getExistingHabits().get(newHabit)) {
         alert(`${newHabit} already exists`)
         return
       }
-      addHabit(newHabit)
+      addHabit(newHabit, points)
+      populateHabits()
       displayOutcome("outcomeAdd-habit", "Sucessfully added! 🎉")
-      populateList("habit", () => getExistingHabits(), h => addHabit(h), h => removeHabit(h))
       populateScheduleDropDownLists()
+    }
+
+    function populateHabits() {
+      const habits = getExistingHabits()
+      console.log(habits)
+
+      const listDiv = document.getElementById("list-habit")
+      if (habits.size == 0) {
+        listDiv.innerText = "Nothing."
+        return
+      }
+
+      // 1. First clear the div 
+      while (listDiv.firstChild) {
+        listDiv.firstChild.remove()
+      }
+      habits
+        .forEach(hab => {
+          const habDiv = document.createElement("div")
+          habDiv.innerText = `${hab.name}: ${hab.points}`
+
+          const onClickFunction = () => {
+            removeHabit(hab.name)
+            displayOutcome("outcomeAction-habit", "Sucessfully removed! 🎉")
+            populateHabits()
+            populateScheduleDropDownLists()
+          }
+          const doneBtn = createBtn("Remove", onClickFunction)
+          habDiv.appendChild(doneBtn)
+
+          listDiv.appendChild(habDiv)
+        });
     }
 
     function tryAddSchedule() {
@@ -221,7 +259,7 @@
 
     // Upon loading page, do the following:
     populateList("user", () => getExistingUsers(), u => addUser(u), u => removeUser(u))
-    populateList("habit", () => getExistingHabits(), h => addHabit(h), h => removeHabit(h))
+    populateHabits()
     populateScheduleDropDownLists()
     populateSchedules()
   </script>

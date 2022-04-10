@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <title>Habit tracker - Home</title>
+  <script type="text/javascript" src="habits.js"></script>
   <script type="text/javascript" src="ranking.js"></script>
   <script type="text/javascript" src="schedules.js"></script>
   <script type="text/javascript" src="html-utils.js"></script>
@@ -53,8 +54,9 @@
               // TODO: when page is refreshed this will pop back up. Store this so this doesn't happen
               // TODO: cross out habit instead of remove?
               shedDiv.remove()
-              addRankingPoints(shed.user, 5) // TODO: just 5 for now (need a points system)
-              displayOutcome("outcomeAction-habit", "Well done!! 👏 You earned points! 🙌")
+              const points = parseInt(getExistingHabits().get(shed.habit).points) // TODO this should be done by the Habit object
+              addRankingPoints(shed.user, points)
+              displayOutcome("outcomeAction-habit", `You earned ${points} points! 🙌 Well done!! 👏`)
             }
             const doneBtn = createBtn("Mark as done", onClickFunction)
             shedDiv.appendChild(doneBtn)
